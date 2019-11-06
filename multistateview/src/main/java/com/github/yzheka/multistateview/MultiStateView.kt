@@ -96,7 +96,7 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
     private fun View.show(animate:Boolean){
         if(visibility==View.VISIBLE||animation==mInAnimation)return
         visibility=View.VISIBLE
-        startAnimation(mInAnimation)
+        if(animate)startAnimation(mInAnimation)
     }
 
     /**
