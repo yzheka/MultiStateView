@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MultiStateView">
+        <attr name="inAnimation" format="reference"/>
+        <attr name="outAnimation" format="reference"/>
+        <attr name="animationsEnabled" format="boolean|reference"/>
+        <attr name="inAnimationDuration" format="integer|reference"/>
+        <attr name="outAnimationDuration" format="integer|reference"/>
+        <attr name="initialState" format="enum">
+            <enum name="content" value="0"/>
+            <enum name="empty" value="1"/>
+            <enum name="error" value="2"/>
+            <enum name="loading" value="3"/>
+            <enum name="undefined" value="4"/>
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="MultiStateView.Layout">
+        <attr name="layout_state" format="enum">
+            <enum name="content" value="0"/>
+            <enum name="empty" value="1"/>
+            <enum name="error" value="2"/>
+            <enum name="loading" value="3"/>
+            <enum name="undefined" value="4"/>
+        </attr>
+        <attr name="layout_hideStrategy" format="enum">
+            <enum name="make_invisible" value="0"/>
+            <enum name="make_gone" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
