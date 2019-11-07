@@ -1,4 +1,4 @@
-# [![](https://jitpack.io/v/yzheka/MultiStateView.svg)](https://jitpack.io/#yzheka/MultiStateView) MultiStateView
+# MultiStateView [![](https://jitpack.io/v/yzheka/MultiStateView.svg)](https://jitpack.io/#yzheka/MultiStateView)
 
 see app module for sample
 
