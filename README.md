@@ -20,5 +20,6 @@ Each child of this view supports fillowing attributes:
 |layout_state          |The state at which to show this child             |
 |layout_hideStrategy   |The way how to hide this child (gone or invisible)|
 
+Demo:
 
-![Demo:](device-2019-11-06-150532.gif)
+![](device-2019-11-06-150532.gif)
