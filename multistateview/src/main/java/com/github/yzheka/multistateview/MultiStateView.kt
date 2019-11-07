@@ -29,11 +29,32 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
      * Get or set state for displaying
      */
     var state get() = mState
-        set(value) {
-            if(mState==value)return
-            mState=value
-            switchToState(value,areAnimationsEnabled)
-        }
+              set(value) = switchToState(value,areAnimationsEnabled)
+
+    /**
+     * Checks whether current state is CONTENT
+     */
+    val isInContentState get() = state==ViewState.CONTENT
+
+    /**
+     * Checks whether current state is LOADING
+     */
+    val isInLoadingState get() = state==ViewState.LOADING
+
+    /**
+     * Checks whether current state is ERROR
+     */
+    val isInErrorState get() = state==ViewState.ERROR
+
+    /**
+     * Checks whether current state is EMPTY
+     */
+    val isInEmptyState get() = state==ViewState.EMPTY
+
+    /**
+     * Checks whether current state is UNDEFINED
+     */
+    val isInUndefinedState get() = state==ViewState.UNDEFINED
 
     /**
      * Sets state to CONTENT
@@ -96,25 +117,27 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
             setInAnimationDuration(array.getInteger(R.styleable.MultiStateView_inAnimationDuration,0).toLong())
             setOutAnimationDuration(array.getInteger(R.styleable.MultiStateView_outAnimationDuration,0).toLong())
             val stateIndex=array.getInt(R.styleable.MultiStateView_initialState,0)
-            mState=ViewState.values()[stateIndex]
-            switchToState(mState,false)
+            switchToState(ViewState.values()[stateIndex],false)
             array.recycle()
         }
     }
 
     private fun switchToState(viewState: ViewState,runAnimation:Boolean){
-        (0 until childCount).mapNotNull { getChildAt(it) }.forEach {
+        if(mState==viewState)return
+        mState=viewState
+        (0 until childCount).mapNotNull { getChildAt(it) }.mapNotNull {
             val state = (it.layoutParams as? LayoutParams?)?.state
-            if (state != null) {
-                if (state == viewState) it.show(runAnimation)
-                else it.hide(runAnimation)
-            }
+            if(state==null)null else it to state
+        }.forEach {
+            it.first.clearAnimation()
+            if (it.second == viewState) it.first.show(runAnimation)
+            else it.first.hide(runAnimation)
         }
         mListeners.forEach { it.onViewStateChanged(this,viewState) }
     }
 
     private fun View.hide(animate: Boolean){
-        if(visibility!=View.VISIBLE||animation==mOutAnimation)return
+        if(visibility!=View.VISIBLE)return
         val params=layoutParams as? LayoutParams?: generateDefaultLayoutParams()
         val visibility=when(params.hideStrategy){
             HideStrategy.MAKE_INVISIBLE->View.INVISIBLE
@@ -125,7 +148,7 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
     }
 
     private fun View.show(animate:Boolean){
-        if(visibility==View.VISIBLE||animation==mInAnimation)return
+        if(visibility==View.VISIBLE)return
         visibility=View.VISIBLE
         if(animate)startAnimation(mInAnimation)
     }
@@ -221,11 +244,10 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
         outAnimDuration=savedSate?.outAnimDuration?:outAnimDuration
         inAnimDurationOverride=savedSate?.inAnimDurationOverride?:inAnimDurationOverride
         outAnimDurationOverride=savedSate?.outAnimDurationOverride?:outAnimDurationOverride
-        mState=savedSate?.mState?:mState
         areAnimationsEnabled=savedSate?.areAnimationsEnabled?:areAnimationsEnabled
         mInAnimation=savedSate?.inAnimation?:mInAnimation
         mOutAnimation=savedSate?.outAnimation?:mOutAnimation
-        switchToState(mState,false)
+        switchToState(savedSate?.mState?:mState,false)
     }
 
     class SavedState:BaseSavedState{
