@@ -1,6 +1,5 @@
 package com.github.yzheka.multistateview
 
-import android.animation.LayoutTransition
 import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
@@ -9,11 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.LayoutAnimationController
 import androidx.annotation.AnimRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import java.util.*
-import kotlin.collections.LinkedHashSet
 
 class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeSet?=null,defStyle:Int=0):ConstraintLayout(context, attrs,defStyle) {
     private var mInAnimation=AnimationUtils.loadAnimation(context,android.R.anim.fade_in)
@@ -38,6 +34,41 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
             mState=value
             switchToState(value,areAnimationsEnabled)
         }
+
+    /**
+     * Sets state to CONTENT
+     */
+    fun showContent(){
+        state=ViewState.CONTENT
+    }
+
+    /**
+     * Sets state to EMPTY
+     */
+    fun showEmpty(){
+        state=ViewState.EMPTY
+    }
+
+    /**
+     * Sets state to ERROR
+     */
+    fun showError(){
+        state=ViewState.ERROR
+    }
+
+    /**
+     * Sets state to LOADING
+     */
+    fun showLoading(){
+        state=ViewState.LOADING
+    }
+
+    /**
+     * Sets state to UNDEFINED
+     */
+    fun showUndefined(){
+        state=ViewState.UNDEFINED
+    }
 
     /**
      * Adds listener for observing state changes
