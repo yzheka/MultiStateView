@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.AnimRes
 import androidx.constraintlayout.widget.ConstraintLayout
 
@@ -24,6 +25,11 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
     private var outAnimDurationOverride=0L
     private var mState=ViewState.CONTENT
     private val mListeners=LinkedHashSet<OnViewStateChangeListener>()
+
+    /**
+     * Do not hide soft keyboard on state change
+     */
+    var keepKeyboardOnStateChange=false
 
     /**
      * Get or set state for displaying
@@ -117,6 +123,7 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
             setInAnimationDuration(array.getInteger(R.styleable.MultiStateView_inAnimationDuration,0).toLong())
             setOutAnimationDuration(array.getInteger(R.styleable.MultiStateView_outAnimationDuration,0).toLong())
             val stateIndex=array.getInt(R.styleable.MultiStateView_initialState,0)
+            keepKeyboardOnStateChange=array.getBoolean(R.styleable.MultiStateView_keepKeyboardOnStateChange,keepKeyboardOnStateChange)
             switchToState(ViewState.values()[stateIndex],false)
             array.recycle()
         }
@@ -134,6 +141,9 @@ class MultiStateView @JvmOverloads constructor(context: Context,attrs:AttributeS
             else it.first.hide(runAnimation)
         }
         mListeners.forEach { it.onViewStateChanged(this,viewState) }
+        if(keepKeyboardOnStateChange)return
+        val manager=context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(windowToken,0)
     }
 
     private fun View.hide(animate: Boolean){

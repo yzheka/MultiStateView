@@ -6,6 +6,7 @@
         <attr name="animationsEnabled" format="boolean|reference"/>
         <attr name="inAnimationDuration" format="integer|reference"/>
         <attr name="outAnimationDuration" format="integer|reference"/>
+        <attr name="keepKeyboardOnStateChange" format="boolean|reference"/>
         <attr name="initialState" format="enum">
             <enum name="content" value="0"/>
             <enum name="empty" value="1"/>
